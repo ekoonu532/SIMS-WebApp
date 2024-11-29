@@ -8,7 +8,7 @@
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
             <div class="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
-                <img src="{{ asset('assets/profile.png') }}" alt="profile" class="mb-3 w-45 h-auto rounded-full">
+                <img src="{{ asset('assets/profile.png') }}" alt="profile" class="mb-3 w-40 h-auto rounded-full">
                 <div class="grid grid-cols-3 gap-6 mb-6">
                     <div class="col-span-2">
                         <label for="purchase_price" class="block text-sm font-medium text-gray-700">Nama Kandidat</label>
