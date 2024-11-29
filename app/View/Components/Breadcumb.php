@@ -6,15 +6,18 @@ use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
 
+
 class Breadcumb extends Component
 {
     public array $values;
+    public array $routes;
     /**
      * Create a new component instance.
      */
-    public function __construct($values = [])
+    public function __construct(array $values = [], array $routes = [])
     {
         $this->values = $values;
+        $this->routes = $routes;
     }
 
     /**

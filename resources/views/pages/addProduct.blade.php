@@ -1,8 +1,14 @@
 <x-app-layout>
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-        <x-breadcumb :values="[__('Daftar Produk'), __('Tambah Produk')]"></x-breadcumb>
-            <div class="bg-white p-8 rounded-lg shadow-md">
+            <x-breadcumb
+                :values="[__('Daftar Produk'), __('Tambah Produk')]"
+                :routes="[
+        route('products.index'),
+        route('products.create')
+    ]"></x-breadcumb>
+
+            <div class="p-8 rounded-lg ">
                 <form action="{{ route('products.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     <!-- Grid Layout -->
@@ -66,12 +72,12 @@
                         <!-- Upload Gambar -->
                         <div class="col-span-3">
                             <label class="block text-sm font-medium text-gray-700">Upload Gambar</label>
-                            <div class="mt-2 flex justify-center border-2 border-dashed border-blue-300 rounded-lg px-6 pt-5 pb-6">
+                            <div id="dropzone" class="mt-2 flex justify-center border-2 border-dashed border-blue-300 rounded-lg px-6 pt-5 pb-6">
                                 <div class="space-y-1 text-center">
                                     <img id="preview-image" src="{{ asset('assets/Image.png') }}" alt="Upload Icon" class="mx-auto h-12 w-12">
                                     <div class="text-sm text-gray-600">
                                         <label for="image" class="relative cursor-pointer bg-white rounded-md font-medium text-blue-600 hover:text-blue-500 focus-within:outline-none">
-                                            <span>Upload gambar di sini</span>
+                                            <span id="dropzone-label">Upload gambar di sini</span>
                                             <input id="image" name="image" type="file" class="sr-only" onchange="previewImage(event)">
                                         </label>
                                     </div>
@@ -85,7 +91,7 @@
 
                     <!-- Tombol -->
                     <div class="flex justify-end gap-4 mt-6">
-                        <a href="{{ route('products.index') }}" class="px-6 py-2 bg-gray-300 text-gray-800 rounded-md hover:bg-gray-400">Batalkan</a>
+                        <a href="{{ route('products.index') }}" class="px-6 py-2 bg-white border border-blue-600 text-blue-600 rounded-md hover:bg-blue-600 hover:text-white">Batalkan</a>
                         <button type="submit" class="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">Simpan</button>
                     </div>
                 </form>
@@ -100,7 +106,7 @@
             const hargaBeli = parseFloat(hargaBeliInput.value);
 
             if (!isNaN(hargaBeli) && hargaBeli >= 0) {
- 
+
                 const hargaJual = hargaBeli * 1.3;
 
                 hargaJualInput.value = Math.round(hargaJual);
@@ -108,22 +114,56 @@
                 hargaJualInput.value = '';
             }
         });
-    </script>
-    <script>
+
         function previewImage(event) {
-            const image = document.getElementById('image').files[0];
+            const image = event.target.files[0];
             const preview = document.getElementById('preview-image');
+            const labelText = document.getElementById('dropzone-label'); 
             const reader = new FileReader();
 
             reader.onload = function(e) {
-                preview.src = e.target.result; 
-                preview.classList.add('h-32', 'w-32', 'object-cover'); 
+                preview.src = e.target.result;
+                preview.classList.add('h-32', 'w-32', 'object-cover');
             };
 
             if (image) {
-                reader.readAsDataURL(image); 
+                reader.readAsDataURL(image);
+                labelText.textContent = image.name; 
             }
         }
-    </script>
 
+        const dropzone = document.getElementById('dropzone');
+        const fileInput = document.getElementById('image');
+        const preview = document.getElementById('preview-image');
+        const labelText = document.getElementById('dropzone-label'); 
+        function handleDrop(event) {
+            event.preventDefault();
+            const file = event.dataTransfer.files[0];
+            const reader = new FileReader();
+
+            reader.onload = function(e) {
+                preview.src = e.target.result;
+                preview.classList.add('h-32', 'w-32', 'object-cover');
+            };
+
+            if (file) {
+                reader.readAsDataURL(file);
+                labelText.textContent = file.name; 
+                const dataTransfer = new DataTransfer();
+                dataTransfer.items.add(file);
+                fileInput.files = dataTransfer.files;
+            }
+        }
+
+        dropzone.addEventListener('dragover', (event) => {
+            event.preventDefault();
+            dropzone.classList.add('border-blue-500');
+        });
+
+        dropzone.addEventListener('dragleave', () => {
+            dropzone.classList.remove('border-blue-500');
+        });
+
+        dropzone.addEventListener('drop', handleDrop);
+    </script>
 </x-app-layout>

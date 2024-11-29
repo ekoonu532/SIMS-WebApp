@@ -48,8 +48,9 @@ class UpdateProductRequest extends FormRequest
             'stock.required' => 'Stok barang harus diisi.',
             'stock.integer' => 'Stok barang harus berupa bilangan bulat.',
             'stock.min' => 'Stok barang tidak boleh kurang dari 0.',
-            'image.mimes' => 'Extensi Gambar harus jpeg, png, jpg',
-            'image.max' => 'Ukuran Maksimal Gambar 2MB'
+            'category_id.required' => 'Kategori produk harus diisi',
+            'image.max' => 'Ukuran gambar maksimal 100KB.',
+            'image.mimes' => 'Gambar harus berupa file dengan format: png atau jpg.',
         ];
     }
 }

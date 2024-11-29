@@ -12,55 +12,60 @@
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
     <script src="https://cdn.jsdelivr.net/npm/flowbite@2.5.2/dist/flowbite.min.js"></script>
-
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.5/dist/cdn.min.js"></script>
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
 <body class="font-sans antialiased">
-    <div class="flex min-h-screen bg-gray-100">
+    <div class="flex min-h-screen bg-white">
         <!-- Sidebar -->
         @include('layouts.navigation')
 
         <!-- Main Content  -->
         <div class="flex-1 flex flex-col">
-            <!-- Page Heading
-                @isset($header)
-                    <header class="bg-white shadow">
-                        <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-                            {{ $header }}
-                        </div>
-                    </header>
-                @endisset -->
+
 
             <!-- Page Content -->
             <main class="flex-1 p-4">
-                <button
-                    id="openSidebarBtn"
-                    class="text-red-500 text-2xl mb-4 hover:text-red-700 focus:outline-none">
-                    &#9776;
-                </button>
                 {{ $slot }}
             </main>
         </div>
     </div>
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            const sidebar = document.getElementById("sidebar");
-            const closeSidebarBtn = document.getElementById("closeSidebarBtn");
-            const openSidebarBtn = document.getElementById("openSidebarBtn");
+    @if (session('success'))
+    <div
+        x-data="{ show: true, timeout: null }"
+        x-show="show"
+        x-init="timeout = setTimeout(() => show = false, 3000)"
+        @mouseenter="clearTimeout(timeout)"
+        @mouseleave="timeout = setTimeout(() => show = false, 3000)"
+        class="fixed top-4 right-4 bg-green-500 text-white px-4 py-4 rounded-lg shadow-lg flex items-center justify-between space-x-4">
+        <span>{{ session('success') }}</span>
+        <button
+            @click="show = false"
+            class="text-white hover:text-gray-200 focus:outline-none">
+            ✕
+        </button>
+    </div>
+    @endif
 
-            // Fungsi untuk menutup sidebar
-            closeSidebarBtn.addEventListener("click", function () {
-                sidebar.classList.add("-translate-x-full");
-            });
-
-            // Fungsi untuk membuka sidebar
-            openSidebarBtn.addEventListener("click", function () {
-                sidebar.classList.remove("-translate-x-full");
-            });
-        });
-    </script>
+    @if (session('error'))
+    <div
+        x-data="{ show: true, timeout: null }"
+        x-show="show"
+        x-init="timeout = setTimeout(() => show = false, 3000)"
+        @mouseenter="clearTimeout(timeout)"
+        @mouseleave="timeout = setTimeout(() => show = false, 3000)"
+        class="fixed top-4 right-4 bg-red-500 text-white px-4 py-2 rounded-lg shadow-lg flex items-center justify-between space-x-4">
+        <span>{{ session('error') }}</span>
+        <button
+            @click="show = false"
+            class="text-white hover:text-gray-200 focus:outline-none">
+            ✕
+        </button>
+    </div>
+    @endif
 </body>
 
 </html>

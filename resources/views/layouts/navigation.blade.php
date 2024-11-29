@@ -3,14 +3,8 @@
         <!-- Logo -->
         <div class="flex items-center justify-center h-16 ">
             <a href="{{ route('products.index') }}" class="flex p-6">
-                <img src="{{ asset('assets/Handbag.png') }}" alt="" class="block h-5 w-auto fill-current " /> <span class="ml-3 text-white font-semibold">SIMS Web App</span>
+                <img src="{{ asset('assets/Handbag.png') }}" alt="" class="block h-5 w-auto fill-current " /> <span class="ml-3 text-white text-xl font-semibold">SIMS Web App</span>
             </a>
-            <button
-                id="closeSidebarBtn"
-                class="text-white text-2xl hover:text-gray-300 focus:outline-none"
-            >
-                &times;
-            </button>
         </div>
 
         <ul class="mt-20">
@@ -36,7 +30,5 @@
                 </form>
             </li>
         </ul>
-
-
     </div>
 </aside>

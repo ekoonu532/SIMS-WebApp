@@ -19,26 +19,32 @@ class ProductsController extends Controller
      */
     public function index(Request $request)
     {
-        $perPage = 10;
+        $perPage = 10; 
         $search = $request->input('search');
         $filter = $request->input('filter');
 
         $query = DB::table('products as p')
             ->leftJoin('categories as c', 'p.category_id', '=', 'c.id')
-            ->select('p.*', 'c.nama as category_name');
+            ->select('p.*', 'c.nama as category_name')
+            ->orderBy('p.id', 'asc');;
 
-        if ($search) {
+        if (!empty($search)) {
             $query->where(function ($q) use ($search) {
                 $q->where('p.name', 'like', "%{$search}%")
                     ->orWhere('c.nama', 'like', "%{$search}%");
             });
         }
 
-        if ($filter && $filter !== 'Semua') {
+        if (!empty($filter) && $filter !== 'Semua') {
             $query->where('p.category_id', $filter);
         }
 
-        $products = $query->paginate($perPage);
+
+        $products = $query->paginate($perPage)->appends([
+            'search' => $search,
+            'filter' => $filter,
+        ]);
+     
 
         $categories = DB::table('categories')->get();
 
@@ -49,6 +55,10 @@ class ProductsController extends Controller
             'filter' => $filter,
         ]);
     }
+
+
+
+
 
     public function export(Request $request)
     {
@@ -110,14 +120,6 @@ class ProductsController extends Controller
     }
 
 
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
 
     /**
      * Show the form for editing the specified resource.

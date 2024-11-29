@@ -1,7 +1,15 @@
 <x-app-layout>
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white p-8 rounded-lg shadow-md">
+            <x-breadcumb
+                :values="[__('Daftar Produk'), __('Edit Produk')]"
+                :routes="[
+        route('products.index'),
+        route('products.edit', $product->id)
+    ]">
+            </x-breadcumb>
+
+            <div class="p-8 rounded-lg">
                 <h2 class="text-lg font-semibold mb-6">Edit Produk</h2>
                 <form action="{{ route('products.update', $product->id) }}" method="POST" enctype="multipart/form-data">
                     @csrf
@@ -64,20 +72,30 @@
                             @enderror
                         </div>
 
+
                         <!-- Upload Gambar -->
                         <div class="col-span-3">
                             <label class="block text-sm font-medium text-gray-700">Upload Gambar</label>
-                            <div class="mt-2 flex justify-center border-2 border-dashed border-blue-300 rounded-lg px-6 pt-5 pb-6">
+                            <div
+                                id="drop-area"
+                                class="mt-2 flex flex-col justify-center items-center border-2 border-dashed border-blue-300 rounded-lg px-6 pt-5 pb-6"
+                                ondragover="handleDragOver(event)"
+                                ondrop="handleDrop(event)">
                                 <div class="space-y-1 text-center">
-                                    @if($product->image)
-                                    <img id="preview-image" src="{{ asset($product->image) }}" alt="Product Image" class="mx-auto h-32 w-32 object-cover">
-                                    @else
-                                    <img id="preview-image" src="{{ asset('assets/Image.png') }}" alt="Default Image" class="mx-auto h-12 w-12">
-                                    @endif
+                                    <img
+                                        id="preview-image"
+                                        src="{{ $product->image ? asset($product->image) : asset('assets/Image.png') }}"
+                                        alt="Product Image"
+                                        class="mx-auto {{ $product->image ? 'h-32 w-32 object-cover' : 'h-12 w-12' }}">
                                     <div class="text-sm text-gray-600">
                                         <label for="image" class="relative cursor-pointer bg-white rounded-md font-medium text-blue-600 hover:text-blue-500 focus-within:outline-none">
-                                            <span>Upload gambar di sini</span>
-                                            <input id="image" name="image" type="file" class="sr-only" onchange="previewImage(event)">
+                                            <span id="file-name">{{ $product->image ? basename($product->image) : 'Upload gambar di sini' }}</span>
+                                            <input
+                                                id="image"
+                                                name="image"
+                                                type="file"
+                                                class="sr-only"
+                                                onchange="handleFileChange(event)">
                                         </label>
                                     </div>
                                 </div>
@@ -87,10 +105,8 @@
                             @enderror
                         </div>
                     </div>
-
-                    <!-- Tombol -->
                     <div class="flex justify-end gap-4 mt-6">
-                        <a href="{{ route('products.index') }}" class="px-6 py-2 bg-gray-300 text-gray-800 rounded-md hover:bg-gray-400">Batalkan</a>
+                        <a href="{{ route('products.index') }}" class="px-6 py-2 bg-white border border-blue-600 text-blue-600 rounded-md hover:bg-blue-600 hover:text-white">Batalkan</a>
                         <button type="submit" class="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">Simpan</button>
                     </div>
                 </form>
@@ -98,19 +114,74 @@
         </div>
     </div>
     <script>
-        function previewImage(event) {
-            const image = document.getElementById('image').files[0];
+        const hargaBeliInput = document.getElementById('harga_beli');
+        const hargaJualInput = document.getElementById('harga_jual');
+
+        hargaBeliInput.addEventListener('input', () => {
+            const hargaBeli = parseFloat(hargaBeliInput.value);
+
+            if (!isNaN(hargaBeli) && hargaBeli >= 0) {
+
+                const hargaJual = hargaBeli * 1.3;
+
+                hargaJualInput.value = Math.round(hargaJual);
+            } else {
+                hargaJualInput.value = '';
+            }
+        });
+        document.addEventListener('DOMContentLoaded', function() {
+            const hargaBeliInput = document.getElementById('harga_beli');
+            if (hargaBeliInput) {
+                hargaBeliInput.value = parseInt(hargaBeliInput.value);
+            }
+
+            const hargaJualInput = document.getElementById('harga_jual');
+            if (hargaJualInput) {
+                hargaJualInput.value = parseInt(hargaJualInput.value);
+            }
+        });
+
+        function previewImage(file) {
             const preview = document.getElementById('preview-image');
             const reader = new FileReader();
 
             reader.onload = function(e) {
-                preview.src = e.target.result; // Set image preview source
-                preview.classList.add('h-32', 'w-32', 'object-cover'); // Optional: adjust preview styling
+                preview.src = e.target.result; 
+                preview.classList.add('h-32', 'w-32', 'object-cover');
             };
 
-            if (image) {
-                reader.readAsDataURL(image); // Read image file as base64
+            if (file) {
+                reader.readAsDataURL(file); 
+            }
+        }
+
+        function handleFileChange(event) {
+            const file = event.target.files[0];
+            if (file) {
+                document.getElementById('file-name').textContent = file.name; 
+                previewImage(file); 
+            }
+        }
+
+        function handleDragOver(event) {
+            event.preventDefault();
+            event.stopPropagation();
+            const dropArea = document.getElementById('drop-area');
+            dropArea.classList.add('border-blue-500'); 
+        }
+
+        function handleDrop(event) {
+            event.preventDefault();
+            event.stopPropagation();
+            const dropArea = document.getElementById('drop-area');
+            dropArea.classList.remove('border-blue-500'); 
+            const file = event.dataTransfer.files[0]; 
+            if (file) {
+                document.getElementById('image').files = event.dataTransfer.files; 
+                document.getElementById('file-name').textContent = file.name; 
+                previewImage(file); 
             }
         }
     </script>
+
 </x-app-layout>

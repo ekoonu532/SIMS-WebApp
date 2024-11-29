@@ -8,10 +8,6 @@ use Illuminate\Support\Facades\Route;
 
 Route::redirect('/', '/login');
 Route::get('/login', [AuthenticatedSessionController::class, 'create']);
-// Route::get('/products', [ProductsController::class, 'index'])
-//     ->middleware(['auth', 'verified'])
-//     ->name('products');
-
 
 Route::middleware('auth')->group(function () {
     Route::get('products/export', [ProductsController::class, 'export'])->name('products.export');

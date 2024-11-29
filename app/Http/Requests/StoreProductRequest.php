@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use App\Rules\MaxFileSize; // Import custom rule untuk ukuran file maksimum
 
 class StoreProductRequest extends FormRequest
 {
@@ -27,7 +28,12 @@ class StoreProductRequest extends FormRequest
             'sale_price' => 'nullable|numeric|min:0', 
             'stock' => 'required|integer|min:0',
             'category_id' => 'required|exists:categories,id', 
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'image' => [
+                'nullable',
+                'mimes:jpeg,png,jpg',
+                'image',
+                'max:100', 
+            ],
         ];
     }
 
@@ -49,6 +55,9 @@ class StoreProductRequest extends FormRequest
             'stock.required' => 'Stok barang harus diisi.',
             'stock.integer' => 'Stok barang harus berupa bilangan bulat.',
             'stock.min' => 'Stok barang tidak boleh kurang dari 0.',
+            'category_id.required' => 'Kategori produk harus diisi',
+            'image.max' => 'Ukuran gambar maksimal 100KB.',
+            'image.mimes' => 'Gambar harus berupa file dengan format: png atau jpg.',
         ];
     }
 }
