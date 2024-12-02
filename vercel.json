@@ -27,10 +27,10 @@
         "LOG_CHANNEL": "stderr",
         "SESSION_DRIVER": "cookie",
         "DB_CONNECTION": "pgsql",
-        "DB_HOST": "postgres.railway.internal",
-        "DB_PORT": "5432",
-        "DB_DATABASE": "railway",
-        "DB_USERNAME": "postgres",
-        "DB_PASSWORD": "OomfVRxmJGdPpmtAKxQkUWIVCmqkxjii"
+        "DB_HOST": "kp2od.h.filess.io",
+        "DB_PORT": "5433",
+        "DB_DATABASE": "simswebapp_brownidea",
+        "DB_USERNAME": "simswebapp_brownidea",
+        "DB_PASSWORD": "f145953140fbae32a460bf57425485653645c7b5"
     }
 }
