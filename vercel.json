@@ -28,8 +28,8 @@
         "DB_CONNECTION": "pgsql",
         "DB_HOST": "postgres.railway.internal",
         "DB_PORT": "5432",
-        "DB_DATABASE": "postgres",
-        "DB_USERNAME": "OomfVRxmJGdPpmtAKxQkUWIVCmqkxjii",
-        "DB_URL": "postgresql://postgres:OomfVRxmJGdPpmtAKxQkUWIVCmqkxjii@postgres.railway.internal:5432/railway"
+        "DB_DATABASE": "railway",
+        "DB_USERNAME": "postgres",
+        "DB_PASSWORD": "OomfVRxmJGdPpmtAKxQkUWIVCmqkxjii"
     }
 }
