@@ -30,8 +30,8 @@ class ProductsController extends Controller
 
         if (!empty($search)) {
             $query->where(function ($q) use ($search) {
-                $q->where('p.name', 'like', "%{$search}%")
-                    ->orWhere('c.nama', 'like', "%{$search}%");
+                $q->where('p.name', 'ILIKE', "%{$search}%")
+                    ->orWhere('c.nama', 'ILIKE', "%{$search}%");
             });
         }
 
